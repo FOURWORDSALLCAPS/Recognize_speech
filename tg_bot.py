@@ -20,7 +20,7 @@ def main():
     def echo(update: Update, context: CallbackContext):
         text = detect_intent_texts(google_project_id, tg_user_id, texts=[update.message.text], language_code='ru-RU')
 
-        context.bot.send_message(chat_id=update.effective_chat.id, text=text)
+        context.bot.send_message(chat_id=update.effective_chat.id, text=text.query_result.fulfillment_text)
 
     echo_handler = MessageHandler(Filters.text & (~Filters.command), echo)
     start_handler = CommandHandler('start', start)

@@ -29,4 +29,7 @@ if __name__ == "__main__":
         if event.type == VkEventType.MESSAGE_NEW and event.to_me:
             text = detect_intent_texts(google_project_id, tg_user_id, texts=[event.text],
                                        language_code='ru-RU')
-            echo(event, vk_api, text)
+            if text.query_result.intent.is_fallback:
+                pass
+            else:
+                echo(event, vk_api, text.query_result.fulfillment_text)
