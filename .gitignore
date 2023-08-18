@@ -54,3 +54,4 @@ MANIFEST
 .idea
 # Script stuff:
 *.log
+application_default_credentials.json
