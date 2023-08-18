@@ -47,3 +47,9 @@
 
 ## Автор
 (2023) Zaitsev Vladimir
+
+## Пример результата для Telegram:
+![image](https://dvmn.org/filer/canonical/1569214094/323/)
+
+## Пример результата для Вконтакте:
+![image](https://dvmn.org/filer/canonical/1569214089/322/)
