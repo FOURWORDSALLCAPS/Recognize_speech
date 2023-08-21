@@ -5,6 +5,16 @@ from environs import Env
 from speech_recognition import detect_intent_texts
 
 
+def start(update: Update, context: CallbackContext):
+    context.bot.send_message(chat_id=update.effective_chat.id, text="I'm an echo bot, please talk to me!")
+
+
+def reply_user(update: Update, context: CallbackContext, google_project_id, tg_user_id):
+    response = detect_intent_texts(google_project_id, tg_user_id, text=update.message.text, language_code='ru-RU')
+
+    context.bot.send_message(chat_id=update.effective_chat.id, text=response.query_result.fulfillment_text)
+
+
 def main():
     env = Env()
     env.read_env()
@@ -14,20 +24,14 @@ def main():
 
     updater = Updater(token=tg_bot_token, use_context=True)
 
-    def start(update: Update, context: CallbackContext):
-        context.bot.send_message(chat_id=update.effective_chat.id, text="I'm an echo bot, please talk to me!")
-
-    def echo(update: Update, context: CallbackContext):
-        text = detect_intent_texts(google_project_id, tg_user_id, texts=[update.message.text], language_code='ru-RU')
-
-        context.bot.send_message(chat_id=update.effective_chat.id, text=text.query_result.fulfillment_text)
-
-    echo_handler = MessageHandler(Filters.text & (~Filters.command), echo)
+    reply_user_handler = MessageHandler(Filters.text & (~Filters.command), lambda update, context: reply_user(
+        update, context, google_project_id, tg_user_id
+    ))
     start_handler = CommandHandler('start', start)
 
     dispatcher = updater.dispatcher
     dispatcher.add_handler(start_handler)
-    dispatcher.add_handler(echo_handler)
+    dispatcher.add_handler(reply_user_handler)
     updater.start_polling()
 
 

@@ -6,7 +6,7 @@ from environs import Env
 from speech_recognition import detect_intent_texts
 
 
-def echo(event, vk_api, text):
+def reply_user(event, vk_api, text):
     vk_api.messages.send(
         user_id=event.user_id,
         message=text,
@@ -27,9 +27,7 @@ if __name__ == "__main__":
 
     for event in longpoll.listen():
         if event.type == VkEventType.MESSAGE_NEW and event.to_me:
-            text = detect_intent_texts(google_project_id, tg_user_id, texts=[event.text],
-                                       language_code='ru-RU')
-            if text.query_result.intent.is_fallback:
-                pass
-            else:
-                echo(event, vk_api, text.query_result.fulfillment_text)
+            response = detect_intent_texts(google_project_id, tg_user_id, text=event.text,
+                                           language_code='ru-RU')
+            if not response.query_result.intent.is_fallback:
+                reply_user(event, vk_api, response.query_result.fulfillment_text)
