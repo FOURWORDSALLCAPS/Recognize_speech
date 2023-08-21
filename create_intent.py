@@ -42,14 +42,13 @@ def main():
         file_contents = file.read()
 
     file_content = json.loads(file_contents)
-    keys = file_content.keys()
 
-    for key in keys:
+    for key, value in file_content.items():
         create_intent(
             project_id=google_project_id,
             display_name=key,
-            training_phrases_parts=file_content[key]['questions'],
-            message_texts=file_content[key]['answer']
+            training_phrases_parts=value['questions'],
+            message_texts=value['answer']
         )
 
 
